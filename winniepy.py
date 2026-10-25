@@ -15,6 +15,12 @@ class Window:
     self.components.append(button)
     return button
 
+  # add component: label
+  def add_label(self, text:str):
+    label = Label(self, text)
+    self.components.append(label)
+    return label
+
   # make the window show on screen
   def show(self): self.root.mainloop()
 
@@ -24,6 +30,22 @@ class Component:
     self.master = master.root
     self.widget = None
 
+  # appearance: changing background color
+  def background_color(self, color:str=""):
+    # if widget isn't None
+    if self.widget:
+      # if no new value provided, just return the current value
+      if color != "": self.widget.config(bg=color)
+      return self.widget.cget("bg")
+
+  # appearance: changing foreground color
+  def foreground_color(self, color:str=""):
+    # if widget isn't None
+    if self.widget:
+      # if no new value provided, just return the current value
+      if color != "": self.widget.config(fg=color)
+      return self.widget.cget("fg")
+
   # applied on every components
   # placing component
   def place(self, x:int, y:int):
@@ -31,25 +53,13 @@ class Component:
 
 class Button(Component):
   # create and add button to master
-  def __init__(self, master:Window, text):
+  def __init__(self, master:Window, text:str):
     super().__init__(master)
     self.widget = tk.Button(master.root, text=text)
     # default position
     self.place(0,0)
 
-  # config: changing background color
-  def background_color(self, color:str=""):
-    # if no new value provided, just return the current value
-    if color != "": self.widget.config(bg=color)
-    return self.widget.cget("bg")
-
-  # config: changing foreground color
-  def foreground_color(self, color:str=""):
-    # if no new value provided, just return the current value
-    if color != "": self.widget.config(fg=color)
-    return self.widget.cget("fg")
-
-  # config: changing button's text
+  # appearance: changing button's text
   def text(self, text:str=""):
     # if no new value provided, just return the current value
     if text != "": self.widget.config(text=text)
@@ -59,3 +69,16 @@ class Button(Component):
   # on_click: left click
   def on_click(self, command=None):
     if command: self.widget.config(command=command)
+
+class Label(Component):
+  def __init__(self, master:Window, text:str):
+    super().__init__(master)
+    self.widget = tk.Label(master.root, text=text)
+    # default position
+    self.place(0,0)
+
+  # appearance: changing button's text
+  def text(self, text:str=""):
+    # if no new value provided, just return the current value
+    if text != "": self.widget.config(text=text)
+    return self.widget.cget("text")
