@@ -99,6 +99,6 @@ class TextBox(Component):
     self.place(0,0)
 
   # get current text value
-  def text(self, value:str=""):
-    if value != "": self.value.set(value)
+  def text(self, value:str|None = None):
+    if value is not None: self.value.set(value)
     return self.value.get()
