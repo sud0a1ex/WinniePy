@@ -21,6 +21,12 @@ class Window:
     self.components.append(label)
     return label
 
+  # add component: textbox
+  def add_textbox(self):
+    textbox = TextBox(self)
+    self.components.append(textbox)
+    return textbox
+
   # make the window show on screen
   def show(self): self.root.mainloop()
 
@@ -82,3 +88,14 @@ class Label(Component):
     # if no new value provided, just return the current value
     if text != "": self.widget.config(text=text)
     return self.widget.cget("text")
+
+class TextBox(Component):
+  def __init__(self, master:Window):
+    super().__init__(master)
+    self.widget = tk.Entry(master.root)
+    # default position
+    self.place(0,0)
+
+  # bind text value with variable
+  def link(self, variable):
+    self.widget.config(textvariable=variable)
