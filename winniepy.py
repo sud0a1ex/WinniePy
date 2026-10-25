@@ -92,10 +92,13 @@ class Label(Component):
 class TextBox(Component):
   def __init__(self, master:Window):
     super().__init__(master)
-    self.widget = tk.Entry(master.root)
+    # create value property and binnd with the textbox
+    self.value = tk.StringVar()
+    self.widget = tk.Entry(master.root, textvariable=self.value)
     # default position
     self.place(0,0)
 
-  # bind text value with variable
-  def link(self, variable):
-    self.widget.config(textvariable=variable)
+  # get current text value
+  def text(self, value:str=""):
+    if value != "": self.value.set(value)
+    return self.value.get()
