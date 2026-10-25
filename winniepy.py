@@ -24,6 +24,7 @@ class Component:
     self.master = master.root
     self.widget = None
 
+  # applied on every components
   # placing component
   def place(self, x:int, y:int):
     if self.widget: self.widget.place(x=x,y=y)
@@ -33,6 +34,8 @@ class Button(Component):
   def __init__(self, master:Window, text):
     super().__init__(master)
     self.widget = tk.Button(master.root, text=text)
+    # default position
+    self.place(0,0)
 
   # config: changing background color
   def background_color(self, color:str=""):
@@ -51,3 +54,8 @@ class Button(Component):
     # if no new value provided, just return the current value
     if text != "": self.widget.config(text=text)
     return self.widget.cget("text")
+
+  # events: button
+  # on_click: left click
+  def on_click(self, command=None):
+    if command: self.widget.config(command=command)
