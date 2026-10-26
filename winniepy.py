@@ -4,6 +4,7 @@ DEFAULT_WINDOW_BACKGROUND = "#111522"
 DEFAULT_FOREGROUND = "#dce3ef"
 DEFAULT_BUTTON_BACKGROUND = "#1e263b"
 DEFAULT_TEXTBOX_BACKGROUND = "#303d59"
+DEFAULT_FRAME_COLOR = "#536684"
 
 class Window:
   # initialization ofc
@@ -34,13 +35,19 @@ class Window:
     self.components.append(textbox)
     return textbox
 
+  # add component: frame
+  def add_frame(self):
+    frame = Frame(self)
+    self.components.append(frame)
+    return frame
+
   # make the window show on screen
   def show(self): self.root.mainloop()
 
 class Component:
   # master: parent window
-  def __init__(self, master:Window):
-    self.master = master.root
+  def __init__(self, master):
+    self.master = master.root if hasattr(master, "root") else master.widget
     self.widget = None
 
   # appearance: changing background color
@@ -113,3 +120,12 @@ class TextBox(Component):
   def text(self, value:str|None = None):
     if value is not None: self.value.set(value)
     return self.value.get()
+
+class Frame(Component):
+  def __init__(self, master):
+    super().__init__(master)
+    self.widget = tk.Frame(self.master)
+    # default position
+    self.place(0,0)
+    # set default color
+    self.widget.config(bg=DEFAULT_FRAME_COLOR)
