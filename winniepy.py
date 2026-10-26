@@ -1,5 +1,10 @@
 import tkinter as tk
 
+DEFAULT_WINDOW_BACKGROUND = "#111522"
+DEFAULT_FOREGROUND = "#dce3ef"
+DEFAULT_BUTTON_BACKGROUND = "#1e263b"
+DEFAULT_TEXTBOX_BACKGROUND = "#303d59"
+
 class Window:
   # initialization ofc
   def __init__(self, title:str, width:int, height:int):
@@ -8,6 +13,8 @@ class Window:
     self.root.geometry(f"{width}x{height}")
     # tracking components
     self.components = []
+    # set default colors
+    self.root.tk_setPalette(background=DEFAULT_WINDOW_BACKGROUND, foreground=DEFAULT_FOREGROUND)
 
   # add component: button
   def add_button(self, text:str):
@@ -64,6 +71,8 @@ class Button(Component):
     self.widget = tk.Button(master.root, text=text)
     # default position
     self.place(0,0)
+    # set default color
+    self.widget.config(bg=DEFAULT_BUTTON_BACKGROUND)
 
   # appearance: changing button's text
   def text(self, text:str=""):
@@ -97,6 +106,8 @@ class TextBox(Component):
     self.widget = tk.Entry(master.root, textvariable=self.value)
     # default position
     self.place(0,0)
+    # set default color
+    self.widget.config(bg=DEFAULT_TEXTBOX_BACKGROUND)
 
   # get current text value
   def text(self, value:str|None = None):
