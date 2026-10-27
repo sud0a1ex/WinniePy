@@ -6,16 +6,11 @@ DEFAULT_BUTTON_BACKGROUND = "#1e263b"
 DEFAULT_TEXTBOX_BACKGROUND = "#303d59"
 DEFAULT_FRAME_COLOR = "#536684"
 
-class Window:
-  # initialization ofc
-  def __init__(self, title:str, width:int, height:int):
-    self.root = tk.Tk()
-    self.root.title(title)
-    self.root.geometry(f"{width}x{height}")
+class Container:
+  # initialization
+  def __init__(self):
     # tracking components
     self.components = []
-    # set default colors
-    self.root.tk_setPalette(background=DEFAULT_WINDOW_BACKGROUND, foreground=DEFAULT_FOREGROUND)
 
   # add component: button
   def add_button(self, text:str):
@@ -40,6 +35,16 @@ class Window:
     frame = Frame(self)
     self.components.append(frame)
     return frame
+
+class Window(Container):
+  # initialization ofc
+  def __init__(self, title:str, width:int, height:int):
+    super().__init__()
+    self.root = tk.Tk()
+    self.root.title(title)
+    self.root.geometry(f"{width}x{height}")
+    # set default colors
+    self.root.tk_setPalette(background=DEFAULT_WINDOW_BACKGROUND, foreground=DEFAULT_FOREGROUND)
 
   # make the window show on screen
   def show(self): self.root.mainloop()
@@ -73,9 +78,9 @@ class Component:
 
 class Button(Component):
   # create and add button to master
-  def __init__(self, master:Window, text:str):
+  def __init__(self, master, text:str):
     super().__init__(master)
-    self.widget = tk.Button(master.root, text=text)
+    self.widget = tk.Button(self.master, text=text)
     # default position
     self.place(0,0)
     # set default color
@@ -93,9 +98,9 @@ class Button(Component):
     if command: self.widget.config(command=command)
 
 class Label(Component):
-  def __init__(self, master:Window, text:str):
+  def __init__(self, master, text:str):
     super().__init__(master)
-    self.widget = tk.Label(master.root, text=text)
+    self.widget = tk.Label(self.master, text=text)
     # default position
     self.place(0,0)
 
@@ -106,11 +111,11 @@ class Label(Component):
     return self.widget.cget("text")
 
 class TextBox(Component):
-  def __init__(self, master:Window):
+  def __init__(self, master):
     super().__init__(master)
     # create value property and binnd with the textbox
     self.value = tk.StringVar()
-    self.widget = tk.Entry(master.root, textvariable=self.value)
+    self.widget = tk.Entry(self.master, textvariable=self.value)
     # default position
     self.place(0,0)
     # set default color
@@ -121,9 +126,11 @@ class TextBox(Component):
     if value is not None: self.value.set(value)
     return self.value.get()
 
-class Frame(Component):
+class Frame(Component, Container):
   def __init__(self, master):
-    super().__init__(master)
+    # initialize with self.master and self.components
+    Component.__init__(self, master)
+    Container.__init__(self)
     self.widget = tk.Frame(self.master)
     # default position
     self.place(0,0)
